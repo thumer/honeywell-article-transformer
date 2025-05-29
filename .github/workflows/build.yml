@@ -20,7 +20,34 @@ jobs:
     - name: Publish
       # Create framework-dependent build (no .NET runtime included)
       run: dotnet publish src/Honeywell.ArticleTransformer/Honeywell.ArticleTransformer/Honeywell.ArticleTransformer.csproj --configuration Release -p:Version=1.0.${{ github.run_number }} --no-self-contained -o publish
+    - name: Archive binaries
+      run: Compress-Archive -Path publish/* -DestinationPath honeywell-article-transformer.zip
     - uses: actions/upload-artifact@v4
       with:
         name: Honeywell.ArticleTransformer
-        path: publish
+        path: honeywell-article-transformer.zip
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: Honeywell.ArticleTransformer
+        path: .
+    - name: Bump version and create tag
+      id: tag
+      uses: anothrNick/github-tag-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DEFAULT_BUMP: patch
+    - name: Create GitHub release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: honeywell-article-transformer.zip
+        tag: ${{ steps.tag.outputs.new_tag }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        generate_release_notes: true
