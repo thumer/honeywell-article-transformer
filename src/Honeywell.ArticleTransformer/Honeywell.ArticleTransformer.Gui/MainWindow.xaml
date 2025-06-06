@@ -1,0 +1,10 @@
+<Window x:Class="Honeywell.ArticleTransformer.Gui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Article Transformer" Height="150" Width="400">
+    <StackPanel Margin="10">
+        <TextBox x:Name="FilePathBox" Margin="0,0,0,10" IsReadOnly="True"/>
+        <Button Content="Select File" Click="OnSelectFile" Margin="0,0,0,10"/>
+        <Button Content="Start" Click="OnStart" />
+    </StackPanel>
+</Window>
