@@ -18,7 +18,7 @@ namespace Honeywell.ArticleTransformer.Core
 
             var lines = Path.GetExtension(inputPath).Equals(".xlsx", StringComparison.OrdinalIgnoreCase)
                 ? ReadXlsx(inputPath)
-                : File.ReadAllLines(inputPath);
+                : ReadCsv(inputPath);
 
             var outputLines = lines.Select(ProcessLine).ToArray();
 
@@ -64,6 +64,19 @@ namespace Honeywell.ArticleTransformer.Core
             text = Regex.Replace(text, "\\s*-", "\r\n-" );
 
             return text.Trim();
+        }
+
+        private static string[] ReadCsv(string path)
+        {
+            try
+            {
+                var utf8 = new UTF8Encoding(false, true);
+                return File.ReadAllLines(path, utf8);
+            }
+            catch (DecoderFallbackException)
+            {
+                return File.ReadAllLines(path, Encoding.GetEncoding(1252));
+            }
         }
 
         private static string[] ReadXlsx(string path)
