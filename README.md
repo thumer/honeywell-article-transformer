@@ -15,6 +15,7 @@ Honeywell.ArticleTransformer.exe eingabe.xlsx
 ```
 
 Bei CSV wird `output.csv` erzeugt, bei XLSX `output.xlsx`. Alle Zeilenumbrüche im Ergebnis nutzen das Windows-Format (UTF-8).
+CSV-Dateien werden zunächst als UTF-8 gelesen. Enthält die Datei ungültige UTF-8-Bytes, erfolgt automatisch ein zweiter Versuch mit Windows-1252 (Latin-1). Das Ergebnis wird immer in UTF-8 gespeichert.
 
 ## Transformationsschritte
 
