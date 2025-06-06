@@ -20,9 +20,11 @@ jobs:
       run: dotnet restore honeywell-article-transformer.sln
     - name: Build
       run: dotnet build honeywell-article-transformer.sln --configuration Release --no-restore
-    - name: Publish
+    - name: Publish console app
       # Create framework-dependent build (no .NET runtime included)
-      run: dotnet publish src/Honeywell.ArticleTransformer/Honeywell.ArticleTransformer/Honeywell.ArticleTransformer.csproj --configuration Release -p:Version=1.0.${{ github.run_number }} --no-self-contained -o publish
+      run: dotnet publish src/Honeywell.ArticleTransformer/Honeywell.ArticleTransformer/Honeywell.ArticleTransformer.csproj --configuration Release -p:Version=1.0.${{ github.run_number }} --no-self-contained -o publish/cli
+    - name: Publish WPF app
+      run: dotnet publish src/Honeywell.ArticleTransformer/Honeywell.ArticleTransformer.Gui/Honeywell.ArticleTransformer.Gui.csproj --configuration Release -p:Version=1.0.${{ github.run_number }} --no-self-contained -o publish/gui
     - name: Archive binaries
       run: Compress-Archive -Path publish/* -DestinationPath honeywell-article-transformer.zip
     - uses: actions/upload-artifact@v4
